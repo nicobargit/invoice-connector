@@ -1,0 +1,10 @@
+{
+    "whop_private_key": "",
+    "stripe_secret_key": "",
+    "discord_bot_token": "",
+    "discord_channel_id": "",
+    "discord_embed": {
+        "logo_img": "https://i.imgur.com/Vbacrt7.png",
+        "name": "Caffeine"
+    }
+}
