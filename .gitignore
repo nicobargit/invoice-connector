@@ -1,5 +1,10 @@
 # Configs
-config
+./config.json
+
+#TMP
+bad_emails.txt
+emails.txt
+test.js
 
 # MacOS Folders
 .DS_Store
