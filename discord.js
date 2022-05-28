@@ -126,7 +126,7 @@ function getWebhookNoCF(invoice, user, embed_configs) {
             title: invoice.id,
             url: "https://dashboard.stripe.com/invoices/" + invoice.id,
             description: "**MISSING CF!**",
-            color: 0x#FFA500,
+            color: 0xFFA500,
             timestamp: new Date().toISOString(),
             footer: {
                 icon_url: embed_configs.logo_img,
