@@ -1,9 +1,12 @@
 const axios = require("axios");
+const fs = require('fs');
 
 var interval;
 var instance;
 var dashboardKeys = []
 var userKeyData = {}
+var emailMap = JSON.parse(fs.readFileSync('emails_map.json'));
+
 
 module.exports = {
     getUsers: function () {
@@ -28,8 +31,14 @@ module.exports = {
     },
     getFromEmail: function (email) {
         var res = undefined;
+        if(Object.keys(emailMap).includes(email.toLocaleLowerCase())) {
+            var target_email = emailMap[email.toLocaleLowerCase()]
+        }
+        else {
+            var target_email = email.toLocaleLowerCase()
+        }
         for (var i = 0; i < Object.keys(userKeyData).length; i++) {
-            if (userKeyData[Object.keys(userKeyData)[i]].email === email) {
+            if (userKeyData[Object.keys(userKeyData)[i]].email && userKeyData[Object.keys(userKeyData)[i]].email.toLocaleLowerCase() === target_email) {
                 res = userKeyData[Object.keys(userKeyData)[i]];
             }
         }
