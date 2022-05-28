@@ -11,7 +11,7 @@ module.exports = {
         var res;
         for (var i = 0; i < customer_fiscal_codes.length; i++) {
             if(customer_fiscal_codes[i].key === key) {
-                res = cf
+                res = customer_fiscal_codes[i]
             }
         }
         return res
