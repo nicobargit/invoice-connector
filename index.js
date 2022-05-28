@@ -1,6 +1,7 @@
 const whop = require('./whop.js')
 const stripe = require('./stripe.js')
 const discord = require('./discord.js')
+const mongo = require('./mongodb.js')
 
 const fs = require('fs');
 
@@ -10,6 +11,7 @@ try {
     whop.start(config.whop_private_key, 60000)
     stripe.start(config.stripe_secret_key, 5000)
     discord.start(config.discord_bot_token)
+    mongo.start(config.mongodb_auth_url, 60000)
 
     setInterval(function () {
         var newInvoices = stripe.getNewPaidInvoices()
@@ -17,7 +19,13 @@ try {
             newInvoices.forEach(invoice => {
                 var user_inv = whop.getFromEmail(invoice.customer_email)
                 if (user_inv) {
-                    discord.sendWebhook(invoice, user_inv, config.discord_channel_id, config.discord_embed)
+                    var cf = mongo.getFiscalCodeFromKey(user_inv.key)
+                    if(cf) {
+                        discord.sendWebhook(invoice, user_inv, config.discord_channel_id, config.discord_embed, cf)
+                    }
+                    else {
+                        discord.sendWebhookNoCF(invoice, user_inv, config.discord_channel_id, config.discord_embed)
+                    }
                 }
                 else {
                     discord.sendErrorWebhook(invoice, config.discord_channel_id, config.discord_embed)
