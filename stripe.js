@@ -16,7 +16,7 @@ module.exports = {
         stripe.invoices.list({ limit: 100 }).then(r => {
             paidInvoicesCatalog = r.data.filter(i => i.status === 'paid');
         });
-
+        console.log("Invoices downloaded at " + new Date().toISOString());
         evaluateInvoices();
         interval = setInterval(evaluateInvoices, delay);
     },
@@ -37,12 +37,9 @@ function evaluateInvoices() {
                     newPaidInvoices.push(inv)
                     console.log("New paid invoice found at " + new Date().toISOString());
                 });
-
             }
-
         });
         paidInvoicesCatalog = r.data.filter(i => i.status === 'paid');
         console.log("Invoices evaluated at " + new Date().toISOString());
     });
-
 }

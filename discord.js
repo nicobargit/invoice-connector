@@ -12,7 +12,7 @@ module.exports = {
         client.channels.cache.get(channel_id).send(getWebhook(invoice, user, embed_configs, cf));
     },
     sendWebhookNoCF: function (invoice, user, channel_id, embed_configs) {
-        client.channels.cache.get(channel_id).send(getWebhook(invoice, user, embed_configs));
+        client.channels.cache.get(channel_id).send(getWebhookNoCF(invoice, user, embed_configs));
     },
     sendErrorWebhook: function (invoice, channel_id, embed_configs) {
         client.channels.cache.get(channel_id).send(getErrorWebhook(invoice, embed_configs));

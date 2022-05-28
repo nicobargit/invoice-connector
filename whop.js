@@ -27,7 +27,7 @@ module.exports = {
         return userKeyData[key]
     },
     getFromEmail: function (email) {
-        var res;
+        var res = undefined;
         for (var i = 0; i < Object.keys(userKeyData).length; i++) {
             if (userKeyData[Object.keys(userKeyData)[i]].email === email) {
                 res = userKeyData[Object.keys(userKeyData)[i]];

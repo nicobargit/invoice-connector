@@ -8,7 +8,7 @@ module.exports = {
         return customer_fiscal_codes;
     },
     getFiscalCodeFromKey: function (key) {
-        var res;
+        var res = undefined;
         for (var i = 0; i < customer_fiscal_codes.length; i++) {
             if(customer_fiscal_codes[i].key === key) {
                 res = customer_fiscal_codes[i]
@@ -17,7 +17,6 @@ module.exports = {
         return res
     },
     start: function (mongoUrl, delay) {
-
         MongoClient.connect(mongoUrl, function (err, db) {
             if (err) throw err;
             dbo = db.db("caffeine_logs");
@@ -26,20 +25,24 @@ module.exports = {
             dbo.collection("customers_cfs").find({}).toArray(function (err, result) {
                if (err) throw err;
                customer_fiscal_codes = result;
+               console.log("Downloaded customers CFs")
             });
         });
         interval = setInterval(function () {
-            dbo.collection("customers_cfs").find({}).toArray(function (err, result) {
-               if (err) throw err;
-               customer_fiscal_codes = result;
-               console.log("Updated customers CFs")
-            });
+            try {
+                dbo.collection("customers_cfs").find({}).toArray(function (err, result) {
+                   if (!err) {
+                       customer_fiscal_codes = result;
+                       console.log("Updated customers CFs")
+                   }
+                });
+            }
+            catch(e) {
+                console.log(e)
+            }
         }, delay);
     },
     stop: function () {
         clearInterval(interval)
-    },
-    update: function () {
-        evaluateInvoices()
     }
 };
