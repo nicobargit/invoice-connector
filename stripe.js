@@ -6,17 +6,17 @@ var newPaidInvoices = []
 
 module.exports = {
     getNewPaidInvoices: function () {
-        var tmp = newPaidInvoices
+        let tmp = newPaidInvoices
         newPaidInvoices = []
         return tmp
     },
     start: function (auth_key, delay) {
         stripe = require('stripe')(auth_key);
         // startFromCheckpoint but atm start from the current status
-        stripe.invoices.list({ limit: 100 }).then(r => {
-            paidInvoicesCatalog = r.data.filter(i => i.status === 'paid');
-        });
-        console.log("Invoices downloaded at " + new Date().toISOString());
+        // stripe.invoices.list({ limit: 100 }).then(r => {
+        //     paidInvoicesCatalog = r.data.filter(i => i.status === 'paid');
+        // });
+        // console.log("Invoices downloaded at " + new Date().toISOString());
         evaluateInvoices();
         interval = setInterval(evaluateInvoices, delay);
     },
