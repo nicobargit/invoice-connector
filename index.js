@@ -23,7 +23,7 @@ try {
                     let invoice_data = getInvoiceData(newInvoices[i])
                     // console.log(invoice_data)
                     mongo.checkStoredInvoiceStatus(invoice_data.id).then(stored_status => {
-                        if (checkActionNeeded(stored_status, invoice_data.status)) {
+                        if (checkActionNeeded(stored_status, invoice_data.status) && checkTime(invoice_data)) {
                             mongo.addOrReplaceInvoice(invoice_data)
                             discord.sendWebhook(invoice_data, config.discord_channel_id, config.discord_embed)
                         }
@@ -43,6 +43,15 @@ function checkActionNeeded(stored_status, current_status) {
     console.log("--- CHECKING ACTION ---\n --- Stored: " + stored_status + "\n --- Current: " + current_status)
     return stored_status !== current_status && ((stored_status === "missing_cf" || stored_status === "not_found") && current_status === "ready") ||
         ((stored_status === "not_found") && current_status === "missing_cf");
+}
+
+function checkTime(invoice) {
+    if(Math.trunc(Date.now()/1000) - invoice.status_transitions.paid_at < 60*60) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 function getInvoiceData(invoice) {
